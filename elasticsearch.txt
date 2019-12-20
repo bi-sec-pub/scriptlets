@@ -1,0 +1,7 @@
+# Quick info for basic usage/verification of ElasticSearch when finding port 9200
+
+# Base page
+http://127.0.x.x:9200/_cat/indices?v
+
+# Use search for a specified **index** to get content
+curl -X GET "http://127.0.x.x:9200/**index**/_search?pretty" -H 'Content-Type: application/json' -d' {"query": { "match_all": {} }}'
