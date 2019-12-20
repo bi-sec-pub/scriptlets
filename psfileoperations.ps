@@ -1,0 +1,41 @@
+# Some PowerShell commands to find and list specific files 
+# Just copy / paste the required command!
+# This is not a script! Just a collection of commands 
+
+#Find interesting Buzzwords
+findstr /si passw *.*
+findstr /si key *.*
+findstr /si passwort *.txt
+findstr /si password *.txt
+
+# List specific file types from subdirectory
+Get-ChildItem -Recurse -Filter *.txt* | Format-Table -Property Verzeichnis,Name,LastWriteTime
+Get-ChildItem -Recurse -Filter *.xls* | Format-Table -Property Verzeichnis,Name,LastWriteTime
+Get-ChildItem -Recurse -Filter *.pdf | Format-Table -Property Verzeichnis,Name,LastWriteTime
+
+# Count all objects (directories and files)  
+Get-ChildItem -Recurse | Measure-Object | %{$_.Count}
+
+# Count only files
+Get-ChildItem -Recurse -File -Force | Measure-Object | %{$_.Count}
+
+# Count only folders 
+Get-ChildItem -Recurse -Directory -Force | Measure-Object | %{$_.Count}
+
+# Get the 10 largest files in the subdirectories
+Get-ChildItem -Recurse | sort -Descending -Property length | select -first 10
+
+# Get only name and length of the 10 largest files in the subdirectories
+Get-ChildItem -Recurse | sort -Descending -Property length | select -first 10 name, length
+ 
+# Only list files with size > 10mb
+Get-ChildItem -Recurse -File | where Length -gt 10mb
+
+# Only list top 10 files with size > 10mb
+Get-ChildItem -Recurse -File | where Length -gt 10mb | sort -Descending -Property length | select -first 10 name, length
+ 
+# List files created since a specific date 
+Get-ChildItem -Recurse -File | where CreationTime -gt 2019-12-08
+ 
+# List files created before a specific date without cutting the pathname
+Get-ChildItem -Recurse -File | where CreationTime -lt 2019-12-01 | select LastWriteTime, CreationTime,LastAccessTime, FullName, Length | Format-Table -AutoSize | Out-String -Width 10000
